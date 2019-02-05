@@ -28,9 +28,6 @@ class App extends Component {
                 <button className="button col-6">0</button>
                 <button className="button col-3">.</button>
                 <button className="button col-3 orange">=</button>
-
-
-
             </div>
           </div>
         </div>
