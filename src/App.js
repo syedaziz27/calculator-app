@@ -91,8 +91,6 @@ class App extends Component {
               <button type="button" className="button col-3">AC</button>
               <button type="button" className="button col-3" value="%" onClick={this.percentConverter}>%</button>
               <button type="button" className="button col-3" value= "±" onClick={this.negativeValue}>±</button>
-              <button type="button" className="button col-3" value= "±" onClick={this.negativeValue}>±</button>
-              <button type="button" className="button col-3">±</button>
               <button type="button" className="button col-3 orange">÷</button>
               <button type="button" className="button col-3" value="7" onClick={this.showNumber}>7</button>
               <button type="button" className="button col-3" value="8" onClick={this.showNumber}>8</button>
