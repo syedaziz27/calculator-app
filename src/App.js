@@ -19,7 +19,9 @@ class App extends Component {
   percentConverter = (e) => {
     let num = this.state.displayValue / 100;
 
-    this.setState({displayValue: num});
+    this.setState({displayValue: num, operation: '%'}, () => {
+      console.log(this.state)
+    });
   }
 
   showNumber = (e) => {
@@ -27,29 +29,37 @@ class App extends Component {
     console.log(num)
     let num2 = e.target.value;
 
+    if (this.state.operation === '%') {
+      this.setState({displayValue: num2, operation: null});
+      return;
+    }
+
+
     if (num === '0') {
       this.state.displayValue = num2;
       this.setState({ displayValue: num2 })
     }
-
     else {
-      this.setState({ displayValue: num.concat(num2) });
+      this.setState({ displayValue: num.toString().concat(num2) });
     }
+  }
 
-    // console.log(e.target.value)
+  negativeValue=(e)=>{
+    let num= this.state.displayValue;
+    num=num*(-1);
+   this.setState({displayValue:num})
   }
 
   addDecimal = (e) => {
     let decimal = e.target.value;
     // console.log(decimal)
-    if (this.state.displayValue.includes(decimal)) {
-      return
+    if (this.state.displayValue.toString().includes(decimal)) {
+      return;
     }
     else {
-      this.setState({ displayValue: (this.state.displayValue).concat(decimal) });
+      this.setState({ displayValue: this.state.displayValue.toString().concat(decimal)});
     }
   }
-
 
   render() {
     return (
@@ -60,7 +70,7 @@ class App extends Component {
               <div className="col-12 inputview">{this.state.displayValue}</div>
               <button type="button" className="button col-3">AC</button>
               <button type="button" className="button col-3" value="%" onClick={this.percentConverter}>%</button>
-              <button type="button" className="button col-3">±</button>
+              <button type="button" className="button col-3" value= "±" onClick={this.negativeValue}>±</button>
               <button type="button" className="button col-3 orange">÷</button>
               <button type="button" className="button col-3" value="7" onClick={this.showNumber}>7</button>
               <button type="button" className="button col-3" value="8" onClick={this.showNumber}>8</button>
