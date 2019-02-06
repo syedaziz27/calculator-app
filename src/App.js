@@ -13,7 +13,13 @@ class App extends Component {
       operation: null,
       waitingForNewValue: false
     }
+  }
 
+
+  clearButton = () => {
+    this.setState({displayValue: '0', previousValue: null}, () => {
+      console.log(this.state)
+    });
   }
 
   percentConverter = (e) => {
@@ -60,7 +66,6 @@ class App extends Component {
     }
   }
 
-
   negativeValue=(e)=>{
     let num= this.state.displayValue;
     num=num*(-1);
@@ -78,9 +83,6 @@ class App extends Component {
     }
   }
 
-
-
-
   render() {
     return (
       <>
@@ -88,22 +90,27 @@ class App extends Component {
           <div className="calculator">
             <div className="row">
               <div className="col-12 inputview">{this.state.displayValue}</div>
-              <button type="button" className="button col-3">AC</button>
+              {
+              this.state.displayValue !== '0' ? 
+              <button type="button" className="button col-3" onClick={this.clearButton}>C</button> 
+              :
+              <button type="button" className="button col-3" onClick={this.clearButton}>AC</button> 
+              }
               <button type="button" className="button col-3" value="%" onClick={this.percentConverter}>%</button>
               <button type="button" className="button col-3" value= "±" onClick={this.negativeValue}>±</button>
-              <button type="button" className="button col-3 orange">÷</button>
+              <button type="button" className="button col-3 orange" value="/" >÷</button>
               <button type="button" className="button col-3" value="7" onClick={this.showNumber}>7</button>
               <button type="button" className="button col-3" value="8" onClick={this.showNumber}>8</button>
               <button type="button" className="button col-3" value="9" onClick={this.showNumber}>9</button>
-              <button type="button" className="button col-3 orange">x</button>
+              <button type="button" className="button col-3 orange" value="*" >x</button>
               <button type="button" className="button col-3" value="4" onClick={this.showNumber}>4</button>
               <button type="button" className="button col-3" value="5" onClick={this.showNumber}>5</button>
               <button type="button" className="button col-3" value="6" onClick={this.showNumber}>6</button>
-              <button type="button" className="button col-3 orange">-</button>
+              <button type="button" className="button col-3 orange" value="-">-</button>
               <button type="button" className="button col-3" value="1" onClick={this.showNumber}>1</button>
               <button type="button" className="button col-3" value="2" onClick={this.showNumber}>2</button>
               <button type="button" className="button col-3" value="3" onClick={this.showNumber}>3</button>
-              <button type="button" className="button col-3 orange">+</button>
+              <button type="button" className="button col-3 orange" value="+" >+</button>
               <button type="button" className="button col-6" value="0" onClick={this.showNumber}>0</button>
               <button type="button" className="button col-3" value="." onClick={this.addDecimal}>.</button>
               <button type="button" className="button col-3 orange">=</button>
