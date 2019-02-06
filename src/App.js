@@ -16,6 +16,12 @@ class App extends Component {
 
   }
 
+  percentConverter = (e) => {
+    let num = this.state.displayValue / 100;
+
+    this.setState({displayValue: num});
+  }
+
   showNumber = (e) => {
     let num = this.state.displayValue;
     console.log(num)
@@ -37,13 +43,12 @@ class App extends Component {
     let decimal = e.target.value;
     // console.log(decimal)
     if (this.state.displayValue.includes(decimal)) {
-      this.setState({ displayValue: this.state.displayValue })
+      return
     }
     else {
       this.setState({ displayValue: (this.state.displayValue).concat(decimal) });
     }
   }
-
 
 
   render() {
@@ -54,7 +59,7 @@ class App extends Component {
             <div className="row">
               <div className="col-12 inputview">{this.state.displayValue}</div>
               <button type="button" className="button col-3">AC</button>
-              <button type="button" className="button col-3">%</button>
+              <button type="button" className="button col-3" value="%" onClick={this.percentConverter}>%</button>
               <button type="button" className="button col-3">±</button>
               <button type="button" className="button col-3 orange">÷</button>
               <button type="button" className="button col-3" value="7" onClick={this.showNumber}>7</button>
