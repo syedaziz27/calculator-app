@@ -14,144 +14,98 @@ class App extends Component {
     }
   }
 
-  clearButton = () => {
-
-    if (this.state.operation === '+') {
-      this.setState({previousValue: (this.state.previousValue - parseFloat(this.state.displayValue)), displayValue: '0', }, () => {
-        console.log(this.state)
-      });
-      return;
-    }
-
-    if (this.state.operation === '-') {
-      this.setState({previousValue: (this.state.previousValue + parseFloat(this.state.displayValue)), displayValue: '0', }, () => {
-        console.log(this.state)
-      });
-      return;
-    }
-    this.setState({displayValue: '0'})
-  }
-
-  clearButtonAll = () => {
-    this.setState({displayValue: '0', previousValue: null, operation: null, waitingForNewValue: false}, () => {
-      console.log(this.state);
-    })
-  }
-
-  percentConverter = (e) => {
+  percentConverter = () => {
     let num = this.state.displayValue / 100;
-
     if (num === 0) this.clearButton();
     else {
-    this.setState({displayValue: num, operation: '%'}, () => {
+    this.setState({displayValue: num, waitingForNewValue: true}, () => {
       console.log(this.state)
     });
   }
 }
 
-  addNum = (e) => {
-    if (!this.state.previousValue) {
-      this.setState({operation: '+', waitingForNewValue: true, previousValue: this.state.displayValue}, ()=> {
-        console.log('clicked plus', this.state);
-      });
-    }
-    else {
-      this.setState({operation: '+', waitingForNewValue: true}, () => {
-        console.log('clicked plus', this.state)
-      })
-    }
-  } 
-
-  subtractNum = (e) => {
-    if (!this.state.previousValue) {
-      this.setState({operation: '-', waitingForNewValue: true, previousValue: this.state.displayValue}, ()=> {
-        console.log('clicked plus', this.state);
-      });
-    }
-    else {
-      this.setState({operation: '-', waitingForNewValue: true}, () => {
-        console.log('clicked subtract', this.state)
-      })
-    }
-  }
-
   showNumber = (e) => {
+
+    if (this.state.displayValue === '.') {
+      this.setState({displayValue: this.state.displayValue.concat(e.target.value)}, () => console.log(this.state));
+      return;
+    }
+
+    if (this.state.operation === '=') {
+      this.setState({displayValue: e.target.value, operation: null}, console.log(this.state));
+      return;
+    }
+
+    if (!this.state.waitingForNewValue) {
+      if (e.target.value === '0') {
+        if (this.state.displayValue === '0') return;
+        else this.setState({displayValue: this.state.displayValue.toString().concat(e.target.value)}, () => {
+          console.log(this.state);
+        });
+      }
+      else this.setState({displayValue: parseFloat(this.state.displayValue.toString().concat(e.target.value))}, () => {
+        console.log(this.state);
+      });
+    }
+    else {
+      this.setState({previousValue: this.state.displayValue, displayValue: e.target.value, waitingForNewValue: false}, () => {
+        console.log(this.state);
+      });
+    }
+  }
+
+  addNum = () => {
+
+    if (this.state.operation === '=') {
+      this.setState({previousValue: this.state.displayValue, operation: '+'}, () => console.log(this.state));
+      return;
+    }
+    if (this.state.waitingForNewValue) {
+      this.setState({operation: '+'}, () => console.log(this.state));
+      return;
+    }
+    if (!this.state.previousValue) {
+      this.setState({operation: '+', previousValue: this.state.displayValue, waitingForNewValue: true}, () => {
+        console.log(this.state)
+      });
+    }
+    else {
+      this.setState({previousValue: parseFloat(this.state.previousValue) + parseFloat(this.state.displayValue), operation: '+', waitingForNewValue: true, displayValue: parseFloat(this.state.previousValue) + parseFloat(this.state.displayValue)}, () => {
+        console.log(this.state);
+      });
+    }
+  }
+
+  equal = () => {
+    if (this.state.waitingForNewValue) {
+      this.setState({displayValue: this.state.displayValue, previousValue: null, operation: '=', waitingForNewValue: false}, ()=> {
+        console.log(this.state);
+      })
+    }
+    else {
+      if (this.state.operation === '+') this.setState({displayValue: parseFloat(this.state.previousValue) + parseFloat(this.state.displayValue), previousValue: null, operation: '=', waitingForNewValue: true}, () =>{
+        console.log(this.state);
+      });
+    }
+  }
+
+  addDecimal = () => {
+    let decimal = '.';
+    if (this.state.waitingForNewValue === true) {
+      this.setState({displayValue: decimal, waitingForNewValue: false}, () => {
+        console.log(this.state)
+      });
+      return;
+    } 
+    if (this.state.displayValue.toString().includes(decimal)) return
+    else this.setState({ displayValue: (this.state.displayValue).toString().concat(decimal) });
+  }
+
+  negativeValue = ()=>{
+    if(this.state.displayValue === '.') return;
     let num = this.state.displayValue;
-    let num2 = e.target.value;
-
-    if (this.state.operation === '+') {
-      if(this.state.previousValue) {
-        this.setState({previousValue: (parseFloat(this.state.previousValue) + parseFloat(num2)), displayValue: num2, operation: null}, () => {
-          console.log(this.state)
-        });
-      }
-      else {
-        this.setState({previousValue: (parseFloat(num) + parseFloat(num2)), displayValue: num2, operation: null}, () => {
-          console.log(this.state)
-        });
-      }
-      return;
-    }
-
-    if (this.state.operation === '-') {
-      if(this.state.previousValue) {
-        this.setState({previousValue: (parseFloat(this.state.previousValue) - parseFloat(num2)), displayValue: num2, operation: null}, () => {
-          console.log(this.state)
-        });
-      }
-      else {
-        this.setState({previousValue: (parseFloat(num) - parseFloat(num2)), displayValue: num2, operation: null}, () => {
-          console.log(this.state)
-        });
-      }
-      return;
-    }
-
-    if (this.state.operation === '%') {
-      this.setState({displayValue: num2, operation: null});
-      return;
-    }
-
-    if (num === '0') {
-      this.setState({ displayValue: num2 })
-    }
-    else {
-      this.setState({ displayValue: num.toString().concat(num2) });
-    }
-  }
-
-  negativeValue=(e)=>{
-    let num= this.state.displayValue;
-    num=num*(-1);
-   this.setState({displayValue:num})
-  }
-
-  addDecimal = (e) => {
-    let decimal = e.target.value;
-    // console.log(decimal)
-    if (this.state.displayValue.toString().includes(decimal)) {
-      return;
-    }
-    else {
-      this.setState({ displayValue: this.state.displayValue.toString().concat(decimal)});
-    }
-  }
-
-  negativeValue=(e)=>{
-    let num= this.state.displayValue;
-    num=num*(-1);
-   this.setState({displayValue:num})
-  }
-
-  addDecimal = (e) => {
-    let decimal = e.target.value;
-    // console.log(decimal)
-    if (this.state.displayValue.toString().includes(decimal)) {
-      return
-    }
-    else {
-      this.setState({ displayValue: (this.state.displayValue).toString().concat(decimal) });
-    }
+    num = num * -1;
+   this.setState({displayValue: num})
   }
 
   render() {
@@ -184,12 +138,12 @@ class App extends Component {
               <button type="button" className="button col-3 orange" value="+" onClick={this.addNum}>+</button>
               <button type="button" className="button col-6" value="0" onClick={this.showNumber}>0</button>
               <button type="button" className="button col-3" value="." onClick={this.addDecimal}>.</button>
-              <button type="button" className="button col-3 orange">=</button>
+              <button type="button" className="button col-3 orange" value="=" onClick={this.equal}>=</button>
             </div>
           </div>
         </div>
       </>
-    )
+    );
   }
 }
 
