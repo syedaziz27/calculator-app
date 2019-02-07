@@ -15,9 +15,27 @@ class App extends Component {
   }
 
   clearButton = () => {
-    this.setState({displayValue: '0', operation: null, waitingForNewValue: false}, () => {
-      console.log(this.state)
-    });
+
+    if (this.state.operation === '+') {
+      this.setState({previousValue: (this.state.previousValue - parseFloat(this.state.displayValue)), displayValue: '0', }, () => {
+        console.log(this.state)
+      });
+      return;
+    }
+
+    if (this.state.operation === '-') {
+      this.setState({previousValue: (this.state.previousValue + parseFloat(this.state.displayValue)), displayValue: '0', }, () => {
+        console.log(this.state)
+      });
+      return;
+    }
+    this.setState({displayValue: '0'})
+  }
+
+  clearButtonAll = () => {
+    this.setState({displayValue: '0', previousValue: null, operation: null, waitingForNewValue: false}, () => {
+      console.log(this.state);
+    })
   }
 
   percentConverter = (e) => {
@@ -31,9 +49,63 @@ class App extends Component {
   }
 }
 
+  addNum = (e) => {
+    if (!this.state.previousValue) {
+      this.setState({operation: '+', waitingForNewValue: true, previousValue: this.state.displayValue}, ()=> {
+        console.log('clicked plus', this.state);
+      });
+    }
+    else {
+      this.setState({operation: '+', waitingForNewValue: true}, () => {
+        console.log('clicked plus', this.state)
+      })
+    }
+  } 
+
+  subtractNum = (e) => {
+    if (!this.state.previousValue) {
+      this.setState({operation: '-', waitingForNewValue: true, previousValue: this.state.displayValue}, ()=> {
+        console.log('clicked plus', this.state);
+      });
+    }
+    else {
+      this.setState({operation: '-', waitingForNewValue: true}, () => {
+        console.log('clicked subtract', this.state)
+      })
+    }
+  }
+
   showNumber = (e) => {
     let num = this.state.displayValue;
     let num2 = e.target.value;
+
+    if (this.state.operation === '+') {
+      if(this.state.previousValue) {
+        this.setState({previousValue: (parseFloat(this.state.previousValue) + parseFloat(num2)), displayValue: num2, operation: null}, () => {
+          console.log(this.state)
+        });
+      }
+      else {
+        this.setState({previousValue: (parseFloat(num) + parseFloat(num2)), displayValue: num2, operation: null}, () => {
+          console.log(this.state)
+        });
+      }
+      return;
+    }
+
+    if (this.state.operation === '-') {
+      if(this.state.previousValue) {
+        this.setState({previousValue: (parseFloat(this.state.previousValue) - parseFloat(num2)), displayValue: num2, operation: null}, () => {
+          console.log(this.state)
+        });
+      }
+      else {
+        this.setState({previousValue: (parseFloat(num) - parseFloat(num2)), displayValue: num2, operation: null}, () => {
+          console.log(this.state)
+        });
+      }
+      return;
+    }
 
     if (this.state.operation === '%') {
       this.setState({displayValue: num2, operation: null});
@@ -93,7 +165,7 @@ class App extends Component {
               this.state.displayValue !== '0' ? 
               <button type="button" className="button col-3" onClick={this.clearButton}>C</button> 
               :
-              <button type="button" className="button col-3" onClick={this.clearButton}>AC</button> 
+              <button type="button" className="button col-3" onClick={this.clearButtonAll}>AC</button> 
               }
               <button type="button" className="button col-3" value="%" onClick={this.percentConverter}>%</button>
               <button type="button" className="button col-3" value= "±" onClick={this.negativeValue}>±</button>
@@ -105,11 +177,11 @@ class App extends Component {
               <button type="button" className="button col-3" value="4" onClick={this.showNumber}>4</button>
               <button type="button" className="button col-3" value="5" onClick={this.showNumber}>5</button>
               <button type="button" className="button col-3" value="6" onClick={this.showNumber}>6</button>
-              <button type="button" className="button col-3 orange" value="-">-</button>
+              <button type="button" className="button col-3 orange" value="-" onClick={this.subtractNum}>-</button>
               <button type="button" className="button col-3" value="1" onClick={this.showNumber}>1</button>
               <button type="button" className="button col-3" value="2" onClick={this.showNumber}>2</button>
               <button type="button" className="button col-3" value="3" onClick={this.showNumber}>3</button>
-              <button type="button" className="button col-3 orange" value="+" >+</button>
+              <button type="button" className="button col-3 orange" value="+" onClick={this.addNum}>+</button>
               <button type="button" className="button col-6" value="0" onClick={this.showNumber}>0</button>
               <button type="button" className="button col-3" value="." onClick={this.addDecimal}>.</button>
               <button type="button" className="button col-3 orange">=</button>
