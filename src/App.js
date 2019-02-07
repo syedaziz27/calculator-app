@@ -107,7 +107,7 @@ class App extends Component {
   }
 
   equal = () => {
-    if (!this.state.previousValue) {
+    if (!this.state.operation === '=' || (!this.state.previousValue)) {
       this.setState({waitingForNewValue: true}, () => {console.log(this.state)});
       return;
     }
