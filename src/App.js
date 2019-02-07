@@ -25,7 +25,6 @@ class App extends Component {
   }
 
   showNumber = (e) => {
-
     if (this.state.displayValue === '.') {
       this.setState({ displayValue: this.state.displayValue.concat(e.target.value) }, () => console.log(this.state));
       return;
@@ -108,6 +107,10 @@ class App extends Component {
   }
 
   equal = () => {
+    if (!this.state.previousValue) {
+      this.setState({waitingForNewValue: true}, () => {console.log(this.state)});
+      return;
+    }
     if (this.state.waitingForNewValue) {
       this.setState({ displayValue: this.state.displayValue, previousValue: null, operation: '=', waitingForNewValue: false }, () => {
         console.log(this.state);
@@ -127,7 +130,7 @@ class App extends Component {
   addDecimal = () => {
     let decimal = '.';
     if (this.state.waitingForNewValue === true) {
-      this.setState({ displayValue: decimal, waitingForNewValue: false }, () => {
+      this.setState({previousValue: this.state.displayValue, displayValue: decimal, waitingForNewValue: false }, () => {
         console.log(this.state)
       });
       return;
