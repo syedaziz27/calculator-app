@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
 
-
 class App extends Component {
 
   constructor(props) {
@@ -15,9 +14,8 @@ class App extends Component {
     }
   }
 
-
   clearButton = () => {
-    this.setState({displayValue: '0', previousValue: null}, () => {
+    this.setState({displayValue: '0', operation: null, waitingForNewValue: false}, () => {
       console.log(this.state)
     });
   }
@@ -25,14 +23,16 @@ class App extends Component {
   percentConverter = (e) => {
     let num = this.state.displayValue / 100;
 
+    if (num === 0) this.clearButton();
+    else {
     this.setState({displayValue: num, operation: '%'}, () => {
       console.log(this.state)
     });
   }
+}
 
   showNumber = (e) => {
     let num = this.state.displayValue;
-    console.log(num)
     let num2 = e.target.value;
 
     if (this.state.operation === '%') {
@@ -41,7 +41,6 @@ class App extends Component {
     }
 
     if (num === '0') {
-      this.state.displayValue = num2;
       this.setState({ displayValue: num2 })
     }
     else {
