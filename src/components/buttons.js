@@ -12,7 +12,7 @@ const Buttons = (props) => {
               }
         <button type="button" className="button col-3" value="%" onClick={props.percentConverter}>%</button>
               <button type="button" className="button col-3" value= "±" onClick={props.negativeValue}>±</button>
-              <button type="button" className="button col-3 orange" value="/" >÷</button>
+              <button type="button" className="button col-3 orange" value="/" onClick={props.divide}>÷</button>
               <button type="button" className="button col-3" value="7" onClick={props.showNumber}>7</button>
               <button type="button" className="button col-3" value="8" onClick={props.showNumber}>8</button>
               <button type="button" className="button col-3" value="9" onClick={props.showNumber}>9</button>
